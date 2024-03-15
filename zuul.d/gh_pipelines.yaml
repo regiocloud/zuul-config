@@ -115,3 +115,31 @@
       github:
         - event: push
           ref: ^refs/tags/.*$
+
+- pipeline:
+    name: label
+    description: |
+      Changes that have been approved by a trusted reviewer who labeled PR with the zuul label
+    manager: independent
+    trigger:
+      github:
+        - event: pull_request
+          action: labeled
+          label:
+            - zuul
+    start:
+      github:
+        check: 'in_progress'
+        comment: false
+    success:
+      github:
+        check: 'success'
+        comment: false
+    failure:
+      github:
+        check: 'failure'
+        comment: false
+    dequeue:
+      github:
+        check: cancelled
+        comment: false
